@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS flashcards;
+
+CREATE TABLE flashcards (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    question TEXT NOT NULL,
+    answer TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

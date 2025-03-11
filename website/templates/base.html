@@ -38,10 +38,15 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
+          {% if user.is_authenticated %}
+          <!-- Only show if logged in -->
+          <a class="nav-item nav-link" id="home" href="/">Home</a>
+          <a class="nav-item nav-link" id="logout" href="/logout">Log Out</a>
+          {% else %}
+          <!-- Only show if logged out -->
           <a class="nav-item nav-link" id="login" href="/login">Login</a>
           <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>
-          <a class="nav-item nav-link" id="logout" href="/logout">Log Out</a>
-          <a class="nav-item nav-link" id="home" href="/">Home</a>
+          {% endif %}
         </div>
       </div>
     </nav>

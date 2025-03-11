@@ -24,7 +24,7 @@ def login():
                 flash('Incorrect password, try again.', category='error')
         else:
             flash('Email is not associated with any account.', category='error')
-    return render_template("login.html", text="Testing", boolean = True)
+    return render_template("login.html", user = current_user)
 
 
 @auth.route('/logout')
@@ -61,4 +61,4 @@ def sign_up():
             flash('Account created!', category='success')
             return redirect(url_for('views.home')) # redirect to the homepage after creating user
 
-    return render_template("sign_up.html")
+    return render_template("sign_up.html", user = current_user)

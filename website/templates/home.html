@@ -1,4 +1,18 @@
 {% extends "base.html" %} {% block title %}Change{% endblock %} {% block content
 %}
-<h1>This is the homepage</h1>
+<h1 align="center">Decks</h1>
+<ul class="list-group list-group-flush" id="decks">
+  {% for deck in user.decks %}
+  <li class="list-group-item">{{deck.title}}</li>
+  {% endfor %}
+</ul>
+
+<form method="POST">
+  <textarea name="deck" , id="deck" , class="form-control"> </textarea>
+  <br />
+  <div align="center">
+    <button type="submit" class="btn btn-primary">Add Deck</button>
+  </div>
+</form>
+
 {% endblock %}

@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
+from flask_login import LoginManager
+
 
 db = SQLAlchemy() # db will be used to interact with database
 DB_NAME = "database.db"
@@ -21,9 +23,20 @@ def create_app():
 
     create_database(app)
 
+
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login' # where redirect to login
+    login_manager.init_app(app) # the app we are using
+
+    # Tells flask how to load user
+    @login_manager.user_loader
+    def load_user(id):
+        return User.query.get(int(id)) # checks the primary key which is the id as an int
+
     return app
 
 def create_database(app): # checks if the db already exists so it doesn't get overwritten each time
     if not path.exists('website/' + DB_NAME):
-        db.create_all(app=app)
-        print('Created Database!')
+        with app.app_context():  # Create an application context
+            db.create_all()  # No need to pass `app` as an argument
+            print('Created Database!')

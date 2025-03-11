@@ -15,7 +15,7 @@ class Deck(db.Model):
     title = db.Column(db.String(100))
     # date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    flashcards = db.relationship('Flashcards') # creates a relationship with the Flashcard class, will store a list of all the cards
+    flashcards = db.relationship('Flashcard') # creates a relationship with the Flashcard class, will store a list of all the cards
 
 class User(db.Model, UserMixin): # inherit db model and UserMixin
     id = db.Column(db.Integer, primary_key=True) # db.Integer sets the type

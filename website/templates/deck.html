@@ -19,7 +19,9 @@ block content %}
   {% endfor %}
 </ul>
 
+</br>
 <!-- Form to add a new flashcard -->
+ <h2> Add a New Card </h2>
 <form method="POST">
   <div class="form-group">
     <label for="question">Question</label>
@@ -52,11 +54,17 @@ block content %}
   function deleteFlashcard(flashcardId) {
     fetch("/delete-flashcard/" + flashcardId, {
       method: "DELETE",
-    }).then((response) => {
-      if (response.ok) {
-        window.location.reload();
-      }
-    });
+    })
+      .then((response) => {
+        if (response.ok) {
+          window.location.reload(); // Reload the page to reflect the deletion
+        } else {
+          alert("Failed to delete flashcard.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   }
 </script>
 {% endblock %}

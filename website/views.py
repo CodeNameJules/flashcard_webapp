@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash,  redirect, url_for
+from flask import Blueprint, render_template, request, flash,  redirect, url_for, jsonify
 from flask_login import login_required, current_user
 from .models import Deck, Flashcard
 from . import db
@@ -54,5 +54,19 @@ def delete_deck(deck_id):
         db.session.delete(deck)
         db.session.commit()
         flash('Deck deleted!', category='success')
+
+    return '', 204  # Return empty response for successful DELETE request
+
+@views.route('/delete-flashcard/<int:flashcard_id>', methods=['DELETE'])
+@login_required
+def delete_flashcard(flashcard_id):
+    flashcard = Flashcard.query.get_or_404(flashcard_id)
+
+    if flashcard.deck.user_id != current_user.id:
+        return jsonify({"error": "You do not have permission to delete this flashcard."}), 403
+    else:
+        db.session.delete(flashcard)
+        db.session.commit()
+        flash('Flashcard deleted!', category='success')
 
     return '', 204  # Return empty response for successful DELETE request

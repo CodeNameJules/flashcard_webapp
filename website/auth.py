@@ -57,7 +57,7 @@ def sign_up():
             new_user = User(email=email, first_name=first_name, password=generate_password_hash(password1, method='scrypt')) #sha256 excryption
             db.session.add(new_user)
             db.session.commit()
-            login_user(user, remember=True) # remembers the user is logged in
+            login_user(new_user, remember=True) # remembers the user is logged in
             flash('Account created!', category='success')
             return redirect(url_for('views.home')) # redirect to the homepage after creating user
 

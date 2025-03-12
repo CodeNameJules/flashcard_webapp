@@ -1,5 +1,6 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
 %}
+</br>
 <h1 align="center">Your Flashcard Decks</h1>
 
 <!-- Display existing decks -->
@@ -13,8 +14,10 @@
   </li>
   {% endfor %}
 </ul>
+</br>
 
 <!-- Form to add a new deck -->
+ <h2>Add a New Deck</h2>
 <form method="POST">
   <div class="form-group">
     <label for="deck">Deck Title</label>

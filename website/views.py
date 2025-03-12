@@ -5,6 +5,8 @@ from . import db
 
 views = Blueprint('views', __name__)
 
+
+#  Create deck
 @views.route('/', methods=['GET', 'POST']) # sub URL leads to home
 @login_required # this route is only accessible if logged in
 def home():
@@ -21,7 +23,7 @@ def home():
             return redirect(url_for('views.home'))
     return render_template("home.html", user = current_user)
 
-
+#  Create Flashcard
 @views.route('/deck/<int:deck_id>', methods=['GET', 'POST'])
 @login_required
 def deck(deck_id):
@@ -42,7 +44,7 @@ def deck(deck_id):
 
     return render_template("deck.html", deck=deck, user=current_user)
 
-
+# Delete deck
 @views.route('/delete-deck/<int:deck_id>', methods=['DELETE'])
 @login_required
 def delete_deck(deck_id):
@@ -57,6 +59,7 @@ def delete_deck(deck_id):
 
     return '', 204  # Return empty response for successful DELETE request
 
+#  Delete flashcard
 @views.route('/delete-flashcard/<int:flashcard_id>', methods=['DELETE'])
 @login_required
 def delete_flashcard(flashcard_id):
@@ -70,3 +73,54 @@ def delete_flashcard(flashcard_id):
         flash('Flashcard deleted!', category='success')
 
     return '', 204  # Return empty response for successful DELETE request
+
+# Edit deck
+@views.route('/edit-deck/<int:deck_id>', methods=['GET', 'POST'])
+@login_required
+def edit_deck(deck_id):
+    deck = Deck.query.get_or_404(deck_id)
+
+    # Ensure the current user owns the deck
+    if deck.user_id != current_user.id:
+        flash('You do not have permission to edit this deck.', category='error')
+        return redirect(url_for('views.home'))
+
+    if request.method == 'POST':
+        new_title = request.form.get('title')
+
+        if len(new_title) < 1:
+            flash('Deck title cannot be empty.', category='error')
+        else:
+            deck.title = new_title
+            db.session.commit()
+            flash('Deck title updated!', category='success')
+            return redirect(url_for('views.home'))
+
+    return render_template("edit_deck.html", deck=deck, user=current_user)
+
+
+# Edit flashcard
+@views.route('/edit-flashcard/<int:flashcard_id>', methods=['GET', 'POST'])
+@login_required
+def edit_flashcard(flashcard_id):
+    flashcard = Flashcard.query.get_or_404(flashcard_id)
+
+    # Ensure the current user owns the flashcard's deck
+    if flashcard.deck.user_id != current_user.id:
+        flash('You do not have permission to edit this flashcard.', category='error')
+        return redirect(url_for('views.deck', deck_id=flashcard.deck.id))
+
+    if request.method == 'POST':
+        new_question = request.form.get('question')
+        new_answer = request.form.get('answer')
+
+        if len(new_question) < 1 or len(new_answer) < 1:
+            flash('Question and answer cannot be empty.', category='error')
+        else:
+            flashcard.question = new_question
+            flashcard.answer = new_answer
+            db.session.commit()
+            flash('Flashcard updated!', category='success')
+            return redirect(url_for('views.deck', deck_id=flashcard.deck.id))
+
+    return render_template("edit_flashcard.html", flashcard=flashcard, user=current_user)

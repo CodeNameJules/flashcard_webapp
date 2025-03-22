@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, flash,  redirect, url_for
 from flask_login import login_required, current_user
 from .models import Deck, Flashcard
 from . import db
+from datetime import datetime, timedelta
 
 views = Blueprint('views', __name__)
 
@@ -124,3 +125,47 @@ def edit_flashcard(flashcard_id):
             return redirect(url_for('views.deck', deck_id=flashcard.deck.id))
 
     return render_template("edit_flashcard.html", flashcard=flashcard, user=current_user)
+
+# Practice flashcards 
+@views.route('/practice/<int:deck_id>', methods=['GET', 'POST'])
+@login_required
+def practice(deck_id):
+    deck = Deck.query.get_or_404(deck_id)
+
+    # Ensure the current user owns the deck
+    if deck.user_id != current_user.id:
+        flash('You do not have permission to practice this deck.', category='error')
+        return redirect(url_for('views.home'))
+
+    # Get flashcards due for review
+    now = datetime.now()
+    due_flashcards = Flashcard.query.filter(
+        Flashcard.deck_id == deck_id,
+        Flashcard.next_review <= now
+    ).all()
+
+    if request.method == 'POST':
+        flashcard_id = request.form.get('flashcard_id')
+        rating = int(request.form.get('rating'))  # 1 = Again, 2 = Hard, 3 = Good, 4 = Easy
+
+        flashcard = Flashcard.query.get_or_404(flashcard_id)
+
+        # Update the flashcard based on the rating (Based on Anki's SM-2 alogorithm)
+        if rating == 1:  # Again
+            flashcard.interval = 1 # reset the interval to be shown within a day
+            flashcard.ease_factor = max(1.3, flashcard.ease_factor - 0.2) # reduce the interval so that if they do well next time it doesn't wait too long, but not below 1.3
+        elif rating == 2:  # Hard
+            flashcard.interval = max(1, int(flashcard.interval * 1.2)) # interval is minimum one day, else increase current interval by 20% (rounding down)
+        elif rating == 3:  # Good
+            flashcard.interval = max(1, int(flashcard.interval * flashcard.ease_factor)) # interval is minimum one day, or increase current interval with the ease factor (default: 2.5x) (rounding down)
+        elif rating == 4:  # Easy
+            flashcard.interval = max(1, int(flashcard.interval * flashcard.ease_factor * 1.5)) # interval is minimum one day, or increase current interval with the ease factor (default: 2.5x) and the bonus of 1.5 (rounding down)
+
+        # Update the next review date
+        flashcard.next_review = now + timedelta(days=flashcard.interval) # timedelta calculate dates and times
+        flashcard.score = rating # update the new score
+        db.session.commit()
+
+        return redirect(url_for('views.practice', deck_id=deck_id))
+
+    return render_template("practice.html", deck=deck, flashcards=due_flashcards, user=current_user)

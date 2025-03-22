@@ -6,10 +6,13 @@ class Flashcard(db.Model): # Model is like a blueprint for the class, ie that al
     id = db.Column(db.Integer, primary_key=True) # default is that the id is auto incremented
     question = db.Column(db.String(300))
     answer = db.Column(db.String(300))
-    score = db.Column(db.Integer)
+    score = db.Column(db.Integer, default = 0) # Track performance (0 = new, 1 = fail, 2 = hard, 3 = good, 4 = easy)
+    interval = db.Column(db.Integer, default=1)  # Interval in days (how often the card should come up)
+    ease_factor = db.Column(db.Float, default=2.5)  # Ease factor (how quickly the interval should grow)
+    next_review = db.Column(db.DateTime, default=func.now())  # Next review date
     # date = db.Column(db.DateTime(timezone=True), default=func.now())
     deck_id = db.Column(db.Integer, db.ForeignKey('deck.id'))
-    deck = db.relationship('Deck', back_populates='flashcards') # back-reference so I cana ccess Deck objects from Flashcard objects
+    deck = db.relationship('Deck', back_populates='flashcards') # back-reference so I can access Deck objects from Flashcard objects
 
 class Deck(db.Model):
     id = db.Column(db.Integer, primary_key=True)

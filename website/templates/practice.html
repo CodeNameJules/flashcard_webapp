@@ -1,0 +1,74 @@
+{% extends "base.html" %} {% block title %}Practice {{ deck.title }}{% endblock
+%} {% block content %}
+<h1 align="center">Practice {{ deck.title }}</h1>
+
+{% if flashcards %}
+<!-- Display Card -->
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title">Question</h5>
+    <p class="card-text">{{ flashcards[0].question }}</p>
+    <button class="btn btn-primary" onclick="showAnswer()">Show Answer</button>
+  </div>
+</div>
+
+<!-- Answer card and buttons are initially hidden through style="display: none" -->
+<div id="answer" style="display: none">
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">Answer</h5>
+      <p class="card-text">{{ flashcards[0].answer }}</p>
+    </div>
+  </div>
+  <!-- Buttons -->
+  <form method="POST">
+    <input type="hidden" name="flashcard_id" value="{{ flashcards[0].id }}" />
+    <div class="btn-group d-flex" role="group">
+      <button
+        type="submit"
+        name="rating"
+        value="1"
+        class="btn btn-outline-danger hover-fill"
+      >
+        Again
+      </button>
+      <button
+        type="submit"
+        name="rating"
+        value="2"
+        class="btn btn-outline-warning hover-fill"
+      >
+        Hard
+      </button>
+      <button
+        type="submit"
+        name="rating"
+        value="3"
+        class="btn btn-outline-success hover-fill"
+      >
+        Good
+      </button>
+      <button
+        type="submit"
+        name="rating"
+        value="4"
+        class="btn btn-outline-primary hover-fill"
+      >
+        Easy
+      </button>
+    </div>
+  </form>
+</div>
+{% else %}
+<div class="alert alert-info" role="alert">
+  No flashcards due for review. Great job!
+</div>
+{% endif %}
+
+<script>
+  // Changes the display of the answer card to be visible
+  function showAnswer() {
+    document.getElementById("answer").style.display = "block";
+  }
+</script>
+{% endblock %}

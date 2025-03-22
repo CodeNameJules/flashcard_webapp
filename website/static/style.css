@@ -1,0 +1,18 @@
+/* Custom button styles */
+.btn-outline-danger,
+.btn-outline-warning,
+.btn-outline-success,
+.btn-outline-primary {
+  background-color: white; /* White background */
+  border-width: 2px; /* Thicker border */
+  transition: all 0.3s ease; /* Smooth transition */
+}
+
+/* Hover effect */
+.btn-outline-danger:hover,
+.btn-outline-warning:hover,
+.btn-outline-success:hover,
+.btn-outline-primary:hover {
+  background-color: inherit; /* Fill with the button's color */
+  color: white !important; /* White text on hover, override Bootstraps black text on some buttons */
+}

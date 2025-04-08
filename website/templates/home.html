@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
 %}
-</br>
-<h1 align="center">Your Flashcard Decks</h1>
+
+<h1 class="center">Your Flashcard Decks</h1>
 
 <!-- Display existing decks -->
 <ul class="list-group list-group-flush" id="decks">
@@ -11,10 +11,10 @@
         {{ deck.title }}
       </a>
       <div>
-        <a href="{{ url_for('views.edit_deck', deck_id=deck.id) }}" class="btn btn-sm btn-link text-secondary">
+        <a href="{{ url_for('views.edit_deck', deck_id=deck.id) }}" class="edit-btn">
           <i class="fa fa-pencil"></i> <!-- Edit icon (pen) -->
         </a>
-        <button type="button" class="btn btn-sm btn-link text-danger" onclick="deleteDeck({{ deck.id }})">
+        <button type="button" class="delete-btn" onclick="deleteDeck({{ deck.id }})">
           <i class="fa fa-times"></i> <!-- Delete icon (x) -->
         </button>
       </div>
@@ -25,9 +25,9 @@
 </br>
 
 <!-- Form to add a new deck -->
- <h2>Add a New Deck</h2>
+ <h2 class="center">Add New Deck</h2>
 <form method="POST">
-  <div class="form-group">
+  <div class="form-field">
     <label for="deck">Deck Title</label>
     <input
       type="text"
@@ -37,9 +37,9 @@
       placeholder="Enter deck title"
     />
   </div>
-  <br />
-  <div align="center">
-    <button type="submit" class="btn btn-primary">Add Deck</button>
+
+  <div class="center">
+    <button type="submit" class="button primary">Add Deck</button>
   </div>
 </form>
 

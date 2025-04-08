@@ -11,7 +11,7 @@
       href="{{ url_for('static', filename='style.css') }}"
     />
 
-    <!-- custom CSS stuff from bootstrap -->
+    <!-- custom CSS stuff from bootstrap and font awesome-->
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -76,7 +76,7 @@
       </button>
     </div>
     {% endif %} {% endfor %} {% endif %} {% endwith %}
-    <div class="container">
+    <div class="main-content">
       {% block content %}
       <!-- Code in here can be overwritten -->
       {% endblock %}
@@ -99,9 +99,9 @@
     ></script>
 
     <!-- This loads files from the static folder -->
-    <!-- <script
+    <script
       type="text/css"
       src="{{ url_for('static', filename= 'index.css')}}"
-    ></script> -->
+    ></script>
   </body>
 </html>

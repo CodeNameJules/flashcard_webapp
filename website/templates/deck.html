@@ -1,82 +1,83 @@
 {% extends "base.html" %} {% block title %}{{ deck.title }}{% endblock %} {%
 block content %}
-<br/>
-<h1 align="center">{{ deck.title }}</h1>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 
-<h2 align="center"> Practice </h2>
-<div align="center">
-<a href="{{ url_for('views.practice', deck_id=deck.id) }}" class="btn btn-primary">Study</a>
+<h1 class="title">{{ deck.title }}</h1>
+
+<div class="center">
+  <a
+    href="{{ url_for('views.practice', deck_id=deck.id) }}"
+    class="button primary"
+    id="practice-btn"
+    >Start Practice</a
+  >
 </div>
-<!-- Form to add a new flashcard -->
-<h2> Add a New Card </h2>
-<form method="POST">
-  <div class="form-group">
+
+<h2 class="section-title">Add a New Card</h2>
+<form method="POST" class="card-form">
+  <div class="form-field">
     <label for="question">Question</label>
     <input
       type="text"
-      class="form-control"
       id="question"
       name="question"
       placeholder="Enter question"
     />
   </div>
-  <div class="form-group">
+  <div class="form-field">
     <label for="answer">Answer</label>
-    <input
-      type="text"
-      class="form-control"
-      id="answer"
-      name="answer"
-      placeholder="Enter answer"
-    />
+    <input type="text" id="answer" name="answer" placeholder="Enter answer" />
   </div>
-  <br />
-  <div align="center">
-    <button type="submit" class="btn btn-primary">Add Flashcard</button>
+  <div class="center">
+    <button type="submit" class="button secondary">Add Flashcard</button>
   </div>
 </form>
-</br>
 
-<!-- Display existing flashcards -->
-<h2> All Cards </h2>
-<ul class="list-group list-group-flush" id="flashcards">
-    {% for flashcard in deck.flashcards %}
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-      <div>
-        <strong>Q:</strong> {{ flashcard.question }} <br />
-        <strong>A:</strong> {{ flashcard.answer }}
-      </div>
-      <div>
-        <a href="{{ url_for('views.edit_flashcard', flashcard_id=flashcard.id) }}" class="btn btn-sm btn-link text-secondary">
-          <i class="fa fa-pencil"></i> <!-- Edit icon (pen) -->
-        </a>
-        <button type="button" class="btn btn-sm btn-link text-danger" onclick="deleteFlashcard({{ flashcard.id }})">
-          <i class="fa fa-times"></i> <!-- Delete icon (x) -->
-        </button>
-      </div>
-    </li>
-    {% endfor %}
-  </ul>
+<h2 class="section-title">All Cards</h2>
+<ul class="flashcard-list">
+  {% for flashcard in deck.flashcards %}
+  <li class="flashcard-item">
+    <div>
+      <strong>Q:</strong> {{ flashcard.question }}<br />
+      <strong>A:</strong> {{ flashcard.answer }}
+    </div>
 
+    <div>
+      <a
+        class="edit-btn"
+        href="{{ url_for('views.edit_flashcard', flashcard_id=flashcard.id) }}"
+      >
+        <i class="fa fa-pencil"></i>
+        <!-- Edit icon (pen) -->
+      </a>
+      <button
+        type="button"
+        class="delete-btn"
+        onclick="deleteFlashcard({{ flashcard.id }})"
+      >
+        <i class="fa fa-times"></i>
+        <!-- Delete icon (x) -->
+      </button>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
 
-
-<!-- JavaScript to handle flashcard deletion -->
 <script>
   function deleteFlashcard(flashcardId) {
     if (confirm("Are you sure you want to delete this flashcard?")) {
-    fetch("/delete-flashcard/" + flashcardId, {
-      method: "DELETE",
-    })
-      .then((response) => {
-        if (response.ok) {
-          window.location.reload(); // Reload the page to reflect the deletion
-        } else {
-          alert("Failed to delete flashcard.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }}
+      fetch("/delete-flashcard/" + flashcardId, { method: "DELETE" })
+        .then((response) => {
+          if (response.ok) {
+            window.location.reload();
+          } else {
+            alert("Failed to delete flashcard.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  }
 </script>
 {% endblock %}

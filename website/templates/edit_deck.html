@@ -1,9 +1,9 @@
 {% extends "base.html" %} {% block title %}Edit Deck{% endblock %} {% block
 content %}
-<h1 align="center">Edit Deck Title</h1>
+<h1 class="center">Edit Deck Title</h1>
 
 <form method="POST">
-  <div class="form-group">
+  <div class="form-field">
     <label for="title">Deck Title</label>
     <input
       type="text"
@@ -13,9 +13,8 @@ content %}
       value="{{ deck.title }}"
     />
   </div>
-  <br />
-  <div align="center">
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+  <div class="center">
+    <button type="submit" class="button primary">Save Changes</button>
   </div>
 </form>
 {% endblock %}

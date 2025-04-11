@@ -1,9 +1,10 @@
-{% extends "base.html" %} {% block title %}Practice {{ deck.title }}{% endblock
-%} {% block content %}
-<h1 align="center">Practice {{ deck.title }}</h1>
+{% extends "base.html" %} {% block title %} {{ deck.title }}{% endblock %} {%
+block content %}
+<h1 align="center">{{ deck.title }}</h1>
 
 {% if flashcards %}
 <!-- Display Card -->
+<br />
 <div class="card mb-3">
   <div class="card-body">
     <h5 class="card-title">Question</h5>
@@ -12,7 +13,7 @@
   </div>
 </div>
 
-<!-- Answer card and buttons are initially hidden through style="display: none" -->
+<!-- Answer card and buttons are initially hidden" -->
 <div id="answer" style="display: none">
   <div class="card mb-3">
     <div class="card-body">
@@ -30,7 +31,7 @@
         value="1"
         class="btn btn-outline-danger hover-fill"
       >
-        Again
+        Fail
       </button>
       <button
         type="submit"
@@ -66,7 +67,7 @@
 {% endif %}
 
 <script>
-  // Changes the display of the answer card to be visible
+  // makes the answer card and rating buttons visible
   function showAnswer() {
     document.getElementById("answer").style.display = "block";
   }

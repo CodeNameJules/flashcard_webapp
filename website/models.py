@@ -1,6 +1,6 @@
-from . import db # importing from this package (website folder)
+from . import db 
 from flask_login import UserMixin # Flask module that makes login simpler
-from sqlalchemy.sql import func # if i want auto populated date
+from sqlalchemy.sql import func # auto populated date
 
 class Flashcard(db.Model): # Model is like a blueprint for the class, ie that all flashcards need to look like this
     id = db.Column(db.Integer, primary_key=True) # default is that the id is auto incremented

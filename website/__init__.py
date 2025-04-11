@@ -8,7 +8,7 @@ db = SQLAlchemy() # db will be used to interact with database
 DB_NAME = "database.db"
 
 def create_app():
-    app = Flask(__name__) # represents the name of the file that was ran(?)
+    app = Flask(__name__) 
     app.config['SECRET_KEY'] = 'superdupersecret'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     db.init_app(app) # takes database to use with app

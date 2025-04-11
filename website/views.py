@@ -21,11 +21,11 @@ def home():
             db.session.add(new_deck)
             db.session.commit()
             flash('Deck created!', category='success')
-            return redirect(url_for('views.home'))
+            return redirect(url_for('views.home')) 
     return render_template("home.html", user = current_user)
 
 #  Create Flashcard
-@views.route('/deck/<int:deck_id>', methods=['GET', 'POST'])
+@views.route('/deck/<int:deck_id>', methods=['GET', 'POST']) 
 @login_required
 def deck(deck_id):
     deck = Deck.query.get_or_404(deck_id)  # Get the deck or return 404 if not found
@@ -46,7 +46,7 @@ def deck(deck_id):
     return render_template("deck.html", deck=deck, user=current_user)
 
 # Delete deck
-@views.route('/delete-deck/<int:deck_id>', methods=['DELETE'])
+@views.route('/delete-deck/<int:deck_id>', methods=['DELETE']) 
 @login_required
 def delete_deck(deck_id):
     deck = Deck.query.get_or_404(deck_id)
@@ -61,7 +61,7 @@ def delete_deck(deck_id):
     return '', 204  # Return empty response for successful DELETE request
 
 #  Delete flashcard
-@views.route('/delete-flashcard/<int:flashcard_id>', methods=['DELETE'])
+@views.route('/delete-flashcard/<int:flashcard_id>', methods=['DELETE']) 
 @login_required
 def delete_flashcard(flashcard_id):
     flashcard = Flashcard.query.get_or_404(flashcard_id)
@@ -146,12 +146,12 @@ def practice(deck_id):
 
     if request.method == 'POST':
         flashcard_id = request.form.get('flashcard_id')
-        rating = int(request.form.get('rating'))  # 1 = Again, 2 = Hard, 3 = Good, 4 = Easy
+        rating = int(request.form.get('rating'))  # 1 = Fail, 2 = Hard, 3 = Good, 4 = Easy
 
         flashcard = Flashcard.query.get_or_404(flashcard_id)
 
-        # Update the flashcard based on the rating (Based on Anki's SM-2 alogorithm)
-        if rating == 1:  # Again
+        # Update the flashcard based on the rating (based on Anki's SM-2 algorithm)
+        if rating == 1:  # Fail
             flashcard.interval = 1 # reset the interval to be shown within a day
             flashcard.ease_factor = max(1.3, flashcard.ease_factor - 0.2) # reduce the interval so that if they do well next time it doesn't wait too long, but not below 1.3
         elif rating == 2:  # Hard
